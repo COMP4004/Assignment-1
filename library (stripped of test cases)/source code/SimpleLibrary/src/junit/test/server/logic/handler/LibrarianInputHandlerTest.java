@@ -124,6 +124,29 @@ public class LibrarianInputHandlerTest extends TestCase {
 		  assertEquals(output.getState(), InputHandler.RETURN_LOANCOPY);
 	  }
 	  
+	  @Test
+	  public void testMonitorSystem() {
+		  output = inputHandler.processInput("monitor system", InputHandler.LIBRARIAN);
+		 
+		  // The system output should only contain the default users and titles.
+		  String expectedSystemOutput = "------\nUsers:\n------\n" +
+			  "[Name][User ID]==[Zhibo@carleton.ca][0]\n" +
+			  "[Name][User ID]==[Yu@carleton.ca][1]\n" +
+			  "[Name][User ID]==[Michelle@carleton.ca][2]\n" +
+			  "[Name][User ID]==[Kevin@carleton.ca][3]\n" +
+			  "[Name][User ID]==[Sun@carleton.ca][4]\n" +
+			  "\n-------\nTitles:\n-------\n" +
+			  "[Book title][ISBN]==[By the grace of God][9781442668584]\n" +
+			  "[Book title][ISBN]==[Dante's lyric poetry ][9781442616899]\n" +
+			  "[Book title][ISBN]==[Courtesy lost][9781442667181]\n" +
+			  "[Book title][ISBN]==[Writing for justice][9781611687910]\n" +
+			  "[Book title][ISBN]==[The act in context][9781317594277]\n";
+		  
+		  // Test screen output
+		  assertEquals(output.getOutput(), expectedSystemOutput);
+		  // Test system state
+		  assertEquals(output.getState(), InputHandler.LIBRARIANLOGIN);
+	  }
 	  
 	  @After
 	  protected void tearDown() {
