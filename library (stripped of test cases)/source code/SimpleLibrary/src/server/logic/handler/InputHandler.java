@@ -181,7 +181,7 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
 			}else if (input.equalsIgnoreCase("add user")) {
-				screenOutput = "Please enter the desired user ID:";
+				screenOutput = "Please enter the user ID information:'username,password'";
 				state=ADD_USER;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -306,6 +306,25 @@ public class InputHandler {
 				screenOutput=functionOutput.getOutput();
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
+			}
+		} else if (state == ADD_USER) {
+			if (input.equalsIgnoreCase("log out")) {
+				screenOutput = "Successfully Log Out!";
+				state = WAITING;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else if (input.equalsIgnoreCase("main menu")) {
+				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
+						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+				state = LIBRARIAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else {
+				functionOutput=outputHandler.createUser(input);
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(LIBRARIAN);
 			}
 		} else if(state==ADD_TITLE){
 			if (input.equalsIgnoreCase("log out")) {

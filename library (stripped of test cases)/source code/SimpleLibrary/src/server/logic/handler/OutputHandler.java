@@ -31,6 +31,8 @@ public class OutputHandler {
 	public static final int USERLOGIN=15;
 	public static final int TITLE_EXISTS = 16;
 	public static final int TITLE_DOESNT_EXIST =17;
+	public static final int USER_EXISTS = 18;
+	public static final int USER_DOESNT_EXIST =19;
 
 	public Output createUser(String input) {
 		Output output=new Output("",0);
@@ -386,6 +388,25 @@ public class OutputHandler {
 			} else {
 				output.setOutput("Title does not exist.");
 				output.setState(TITLE_DOESNT_EXIST);
+			}
+		}
+		return output;
+	}
+	
+	public Output findUser(String userId) {
+		Output output = new Output("", 0);
+		Object result = "";
+		boolean isInteger = isInteger(userId);
+		if (!isInteger) {
+			output.setOutput("The userId must be a number.");
+		} else {
+			result = UserTable.getInstance().lookup(Integer.parseInt(userId));
+			if ((boolean)result) {
+				output.setOutput("User already exists.");
+				output.setState(USER_EXISTS);
+			} else {
+				output.setOutput("User does not exist.");
+				output.setState(USER_DOESNT_EXIST);
 			}
 		}
 		return output;
