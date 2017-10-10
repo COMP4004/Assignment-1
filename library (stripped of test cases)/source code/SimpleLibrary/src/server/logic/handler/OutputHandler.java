@@ -7,6 +7,7 @@ import server.logic.model.Title;
 import server.logic.model.User;
 import server.logic.tables.FeeTable;
 import server.logic.tables.ItemTable;
+import server.logic.tables.LibrarianTable;
 import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
 import server.logic.tables.UserTable;
@@ -315,18 +316,18 @@ public class OutputHandler {
 		int result=0;
 		if(strArray.length!=2 || email!=true){
 			output.setOutput("Your input should in this format:'username,password'");
-			output.setState(USERLOGIN);
+			output.setState(InputHandler.LIBRARIANLOGIN);
 		}else{
-			result=UserTable.getInstance().checkUser(strArray[0], strArray[1]);
+			result=LibrarianTable.getInstance().checkUser(strArray[0], strArray[1]);
 			if(result==0){
 				output.setOutput("Please select one of the following options: 'add item', 'add user', ");
-				output.setState(USER);
+				output.setState(InputHandler.LIBRARIAN);
 			}else if(result==1){
 				output.setOutput("Wrong Password!Please Input Username and Password:'username,password'");
-				output.setState(USERLOGIN);
+				output.setState(InputHandler.LIBRARIANLOGIN);
 			}else{
 				output.setOutput("The User Does Not Exist!Please The Username and Password:'username,password'");
-				output.setState(USERLOGIN);
+				output.setState(InputHandler.LIBRARIANLOGIN);
 			}
 		}
 		return output;
@@ -430,6 +431,23 @@ public class OutputHandler {
 				output.setState(ITEM_DOESNT_EXIST);
 			}
 		}
+		return output;
+	}
+	
+	public Output checkReservation(String input) {
+		Output output = new Output("", 0);
+		String[] strArray = null;
+		strArray = input.split(",");
+		boolean isISBN = OutputHandler.isInteger(strArray[0]);
+		if (strArray.length!=2 || !isISBN) {
+			output.setOutput("Your input should be in this format:'ISBN,copyID'");
+			output.setState(InputHandler.CHECK_RESERVATION);
+		} else {
+			boolean onLoan = LoanTable.getInstance().checkLoan(strArray[0], strArray[1]);
+			output.setOutput(!onLoan ? "The title is on loan." : "The title is free to loan.");
+			output.setState(InputHandler.LIBRARIAN);
+		}
+		
 		return output;
 	}
 
