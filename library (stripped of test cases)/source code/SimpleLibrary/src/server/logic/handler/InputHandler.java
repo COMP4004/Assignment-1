@@ -2,6 +2,8 @@ package server.logic.handler;
 
 import server.logic.handler.model.Output;
 import server.logic.handler.model.ServerOutput;
+import server.logic.tables.ItemTable;
+import server.logic.tables.UserTable;
 
 public class InputHandler {
 	// TODO move all of these to a common STATE class.
@@ -283,19 +285,19 @@ public class InputHandler {
 				serverOutput.setState(state);
 			}
 		} else if (state == ADD_ITEM) {
-			if(input.equalsIgnoreCase("log out")){
+			if (input.equalsIgnoreCase("log out")) {
 				screenOutput = "Successfully Log Out!";
 				state = WAITING;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
-			}else if(input.equalsIgnoreCase("main menu")){
+			} else if(input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
 						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
-			}else{
+			} else {
 				functionOutput=outputHandler.findTitle(input);
 				if (functionOutput.getState() == OutputHandler.TITLE_EXISTS) {	
 					state = LIBRARIAN;
@@ -306,6 +308,56 @@ public class InputHandler {
 				screenOutput=functionOutput.getOutput();
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
+			}
+		} else if (state == BORROW_LOANCOPY) {
+			if (input.equalsIgnoreCase("log out")) {
+				screenOutput = "Successfully Log Out!";
+				state = WAITING;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else if(input.equalsIgnoreCase("main menu")) {
+				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
+						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+				state = LIBRARIAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else {
+				String[] strArray = null;
+				strArray = input.split(",");
+				if (strArray.length != 2) {
+					serverOutput.setOutput("Your input should be in this format:'userID,itemID'");
+					serverOutput.setState(LIBRARIAN);
+				} else {
+					// Get the user name and isbn using the user id and item id.
+					functionOutput=outputHandler.findUser(strArray[0]);
+					if (functionOutput.getState() == OutputHandler.USER_DOESNT_EXIST) {	
+						serverOutput.setState(LIBRARIAN);
+						serverOutput.setOutput(functionOutput.getOutput());
+					} else if (functionOutput.getState() == OutputHandler.USER_EXISTS) {
+						String userName = UserTable.getInstance().lookupUserName(Integer.valueOf(strArray[0]));
+						functionOutput=outputHandler.findItem(strArray[1], "1");
+						if (functionOutput.getState() == OutputHandler.ITEM_DOESNT_EXIST) {	
+							serverOutput.setState(LIBRARIAN);
+							serverOutput.setOutput(functionOutput.getOutput());
+						} else if (functionOutput.getState() == OutputHandler.ITEM_EXISTS) {
+							String isbn = ItemTable.getInstance().lookupISBN(Integer.valueOf(strArray[1]));
+							// Attempt to borrow the copy.
+							String borrowInfo = userName + "," + isbn + ",1";
+							functionOutput=outputHandler.borrow(borrowInfo);
+							if (functionOutput.getOutput().equals("Outstanding Fee Exists")) {
+								// Outstanding fees. Process the Collect Fine use case.
+								// TODO handle Collect Fine use case.
+							} else if (functionOutput.getOutput().equals("The Item is Not Available")) {
+								// The item is on loan. Process the Check Reservation use case.
+								// TODO handle Check Reservation use case						
+							}
+							screenOutput=functionOutput.getOutput();
+							serverOutput.setOutput(screenOutput);
+							serverOutput.setState(LIBRARIAN);
+						} 
+					}
+				}
 			}
 		} else if (state == ADD_USER) {
 			if (input.equalsIgnoreCase("log out")) {

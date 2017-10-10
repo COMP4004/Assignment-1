@@ -48,13 +48,13 @@ public class ItemTable {
 		}
 		return result;
 	}
-	public boolean lookup(String string, String string2) {
+	public boolean lookup(String isbn, String copyNumber) {
 		boolean result=true;
 		int flag=0;
 		for(int i=0;i<itemList.size();i++){
 			String ISBN=(itemList.get(i)).getISBN();
 			String copynumber=(itemList.get(i)).getCopynumber();
-			if(ISBN.equalsIgnoreCase(string) && copynumber.equalsIgnoreCase(string2)){
+			if(ISBN.equalsIgnoreCase(isbn) && copynumber.equalsIgnoreCase(copyNumber)){
 				flag=flag+1;
 			}else{
 				flag=flag+0;	
@@ -99,6 +99,19 @@ public class ItemTable {
 		}
 		return result;
 	}
+	
+	public String lookupISBN(int itemId) {
+		String isbn = "";
+		
+		for (int i=0;i<itemList.size();i++) {
+			if(itemList.get(i).getItemid() == itemId) {
+				isbn = itemList.get(i).getISBN();
+				break;
+			}
+		}
+		return isbn;
+	}
+	
 	public void deleteAll(String string) {
 		for(int i=0;i<itemList.size();i++){
 			if(string.equalsIgnoreCase(itemList.get(i).getISBN())){
@@ -109,6 +122,7 @@ public class ItemTable {
 		}
 		
 	}
+	
 	public List<Item> getItemTable() {
 		return itemList;
 	}

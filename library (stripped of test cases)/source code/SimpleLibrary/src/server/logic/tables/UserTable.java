@@ -119,6 +119,19 @@ public class UserTable {
 		}
 		return userid;
 	}
+	
+	public String lookupUserName(int userId) {
+		String userName = "";
+		
+		for (int i=0;i<userList.size();i++) {
+			if(userList.get(i).getUserid() == userId) {
+				userName = userList.get(i).getUsername();
+				break;
+			}
+		}
+		return userName;
+	}
+	
 	public int checkUser(String string, String string2) {
 		int result=0;
 		int flag=0;

@@ -27,40 +27,40 @@ public class LoanTable {
     public static final LoanTable getInstance() {
         return LoanListHolder.INSTANCE;
     }
-	public Object createloan(int i, String string, String string2, Date date) {
+	public Object createloan(int userId, String bookIsbn, String copyNumber, Date date) {
 		String result="";
-		boolean user=UserTable.getInstance().lookup(i);
-		boolean isbn=TitleTable.getInstance().lookup(string);
-		boolean copynumber=ItemTable.getInstance().lookup(string,string2);
-		boolean oloan=LoanTable.getInstance().lookup(i,string,string2);
-		boolean limit=LoanTable.getInstance().checkLimit(i);
-		boolean fee=FeeTable.getInstance().lookup(i);
+		boolean user=UserTable.getInstance().lookup(userId);
+		boolean isbn=TitleTable.getInstance().lookup(bookIsbn);
+		boolean copynumber=ItemTable.getInstance().lookup(bookIsbn,copyNumber);
+		boolean oloan=LoanTable.getInstance().lookup(userId,bookIsbn,copyNumber);
+		boolean limit=LoanTable.getInstance().checkLimit(userId);
+		boolean fee=FeeTable.getInstance().lookup(userId);
 		if(user==false){
 			result="User Invalid";
-			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid User.", i,string,string2,dateformat(date)));
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid User.", userId,bookIsbn,copyNumber,dateformat(date)));
 		}else if(isbn==false){
 			result="ISBN Invalid";
-			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid ISBN.", i,string,string2,dateformat(date)));
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid ISBN.", userId,bookIsbn,copyNumber,dateformat(date)));
 		}else if(copynumber==false){
 			result="Copynumber Invalid";
-			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid Copynumber.", i,string,string2,dateformat(date)));
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid Copynumber.", userId,bookIsbn,copyNumber,dateformat(date)));
 		}else{
 			if(oloan){
 				if(limit && fee){
-				Loan loan=new Loan(i,string,string2,date,"0");
+				Loan loan=new Loan(userId,bookIsbn,copyNumber,date,"0");
 				loanList.add(loan);
 				result="success";
-				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Success", i,string,string2,dateformat(date)));
+				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Success", userId,bookIsbn,copyNumber,dateformat(date)));
 				}else if(limit==false){
 					result="The Maximun Number of Items is Reached";
-					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Maximun Number of Items is Reached.", i,string,string2,dateformat(date)));
+					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Maximun Number of Items is Reached.", userId,bookIsbn,copyNumber,dateformat(date)));
 				}else if(fee==false){
 					result="Outstanding Fee Exists";
-					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Outstanding Fee Exists.", i,string,string2,dateformat(date)));
+					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Outstanding Fee Exists.", userId,bookIsbn,copyNumber,dateformat(date)));
 				}
 			}else{
 				result="The Item is Not Available";
-				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Item is Not Available.", i,string,string2,dateformat(date)));
+				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Item is Not Available.", userId,bookIsbn,copyNumber,dateformat(date)));
 			}
 		}
     	return result;

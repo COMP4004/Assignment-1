@@ -30,9 +30,11 @@ public class OutputHandler {
 	public static final int CLERKLOGIN=14;
 	public static final int USERLOGIN=15;
 	public static final int TITLE_EXISTS = 16;
-	public static final int TITLE_DOESNT_EXIST =17;
+	public static final int TITLE_DOESNT_EXIST = 17;
 	public static final int USER_EXISTS = 18;
-	public static final int USER_DOESNT_EXIST =19;
+	public static final int USER_DOESNT_EXIST = 19;
+	public static final int ITEM_EXISTS = 20;
+	public static final int ITEM_DOESNT_EXIST = 21;
 
 	public Output createUser(String input) {
 		Output output=new Output("",0);
@@ -396,17 +398,36 @@ public class OutputHandler {
 	public Output findUser(String userId) {
 		Output output = new Output("", 0);
 		Object result = "";
-		boolean isInteger = isInteger(userId);
+		boolean isInteger = isNumber(userId);
 		if (!isInteger) {
-			output.setOutput("The userId must be a number.");
+			output.setOutput("The user ID must be a number.");
 		} else {
-			result = UserTable.getInstance().lookup(Integer.parseInt(userId));
+			result = UserTable.getInstance().lookup(Integer.valueOf(userId));
 			if ((boolean)result) {
 				output.setOutput("User already exists.");
 				output.setState(USER_EXISTS);
 			} else {
 				output.setOutput("User does not exist.");
 				output.setState(USER_DOESNT_EXIST);
+			}
+		}
+		return output;
+	}
+	
+	public Output findItem(String itemId, String copyNumber) {
+		Output output = new Output("", 0);
+		Object result = "";
+		boolean isInteger = isNumber(itemId);
+		if (!isInteger) {
+			output.setOutput("The item ID must be a number.");
+		} else {
+			result = ItemTable.getInstance().lookup(ItemTable.getInstance().lookupISBN(Integer.parseInt(itemId)), copyNumber);
+			if ((boolean)result) {
+				output.setOutput("Item already exists.");
+				output.setState(ITEM_EXISTS);
+			} else {
+				output.setOutput("Item does not exist.");
+				output.setState(ITEM_DOESNT_EXIST);
 			}
 		}
 		return output;
