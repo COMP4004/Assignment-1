@@ -2,6 +2,7 @@ package server.logic.handler;
 
 import server.logic.handler.model.Output;
 import server.logic.handler.model.ServerOutput;
+import server.logic.tables.FeeTable;
 import server.logic.tables.ItemTable;
 import server.logic.tables.UserTable;
 
@@ -198,7 +199,7 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
 			}else if (input.equalsIgnoreCase("collect fine")) {
-				screenOutput = "Please enter the user ID and item ID:'user ID,item ID'";
+				screenOutput = "Please enter the user ID:";
 				state=COLLECT_FINE;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -357,6 +358,30 @@ public class InputHandler {
 							serverOutput.setState(LIBRARIAN);
 						} 
 					}
+				}
+			}
+		} else if (state == COLLECT_FINE) {
+			if (input.equalsIgnoreCase("log out")) {
+				screenOutput = "Successfully Log Out!";
+				state = WAITING;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else if (input.equalsIgnoreCase("main menu")) {
+				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
+						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+				state = LIBRARIAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else {
+				functionOutput=outputHandler.findUser(input);
+				if (functionOutput.getState() == OutputHandler.USER_DOESNT_EXIST) {	
+					serverOutput.setState(LIBRARIAN);
+					serverOutput.setOutput(functionOutput.getOutput());
+				} else if (functionOutput.getState() == OutputHandler.USER_EXISTS) {
+					String result = (String)FeeTable.getInstance().payfine(Integer.valueOf(input));
+					serverOutput.setOutput(result);
+					serverOutput.setState(LIBRARIAN);
 				}
 			}
 		} else if (state == ADD_USER) {
