@@ -29,6 +29,8 @@ public class OutputHandler {
 	public static final int PAYFINE=13;
 	public static final int CLERKLOGIN=14;
 	public static final int USERLOGIN=15;
+	public static final int TITLE_EXISTS = 16;
+	public static final int TITLE_DOESNT_EXIST =17;
 
 	public Output createUser(String input) {
 		Output output=new Output("",0);
@@ -368,6 +370,25 @@ public class OutputHandler {
 		systemStatus.setState(InputHandler.LIBRARIANLOGIN);
 		
 		return systemStatus;
+	}
+	
+	public Output findTitle(String isbn) {
+		Output output = new Output("", 0);
+		Object result = "";
+		boolean isInteger = isInteger(isbn);
+		if (isbn.length() != 13 || !isInteger) {
+			output.setOutput("The ISBN must be 13 digits long.");
+		} else {
+			result = TitleTable.getInstance().lookup(isbn);
+			if ((boolean)result) {
+				output.setOutput("Title already exists.");
+				output.setState(TITLE_EXISTS);
+			} else {
+				output.setOutput("Title does not exist.");
+				output.setState(TITLE_DOESNT_EXIST);
+			}
+		}
+		return output;
 	}
 
 	public static boolean isInteger(String value) {

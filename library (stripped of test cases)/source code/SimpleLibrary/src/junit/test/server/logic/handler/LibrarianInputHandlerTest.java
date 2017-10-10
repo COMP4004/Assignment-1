@@ -9,6 +9,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import server.logic.handler.InputHandler;
 import server.logic.handler.OutputHandler;
+import server.logic.handler.model.Output;
 import server.logic.handler.model.ServerOutput;
 import server.logic.tables.LibrarianTable;
 import server.logic.tables.TitleTable;

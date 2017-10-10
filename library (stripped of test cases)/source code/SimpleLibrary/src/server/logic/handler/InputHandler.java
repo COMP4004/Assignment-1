@@ -282,7 +282,56 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
 			}
-		}else if(state==CREATEITEM){
+		} else if (state == ADD_ITEM) {
+			if(input.equalsIgnoreCase("log out")){
+				screenOutput = "Successfully Log Out!";
+				state = WAITING;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			}else if(input.equalsIgnoreCase("main menu")){
+				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
+						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+				state = LIBRARIAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			}else{
+				functionOutput=outputHandler.findTitle(input);
+				if (functionOutput.getState() == OutputHandler.TITLE_EXISTS) {	
+					state = LIBRARIAN;
+				} else if (functionOutput.getState() == OutputHandler.TITLE_DOESNT_EXIST) {
+					input = "get title information";
+					state = ADD_TITLE;
+				}
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			}
+		} else if(state==ADD_TITLE){
+			if (input.equalsIgnoreCase("log out")) {
+				screenOutput = "Successfully Log Out!";
+				state = WAITING;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else if (input.equalsIgnoreCase("main menu")) {
+				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
+						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+				state = LIBRARIAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else if (input.equalsIgnoreCase("get title information")) { 
+				screenOutput = "Please enter the title information:'ISBN,title',ISBN should be a 13-digit number";
+				state = ADD_TITLE;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
+			} else {
+				functionOutput=outputHandler.createTitle(input);
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(LIBRARIAN);
+			}
+		} else if(state==CREATEITEM){
 			if(input.equalsIgnoreCase("log out")){
 				screenOutput = "Successfully Log Out!";
 				state = WAITING;
