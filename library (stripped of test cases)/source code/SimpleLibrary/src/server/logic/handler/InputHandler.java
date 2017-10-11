@@ -286,7 +286,18 @@ public class InputHandler {
 				serverOutput.setOutput(functionOutput.getOutput());
 			} else if (functionOutput.getState() == OutputHandler.ITEM_EXISTS) {
 				String isbn = ItemTable.getInstance().lookupISBN(Integer.valueOf(input));
-				functionOutput=outputHandler.deleteTitle(isbn);
+				functionOutput=outputHandler.deleteItem(isbn+",1");
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(LIBRARIAN);
+			} 		
+		} else if (state == REMOVE_TITLE) {
+	 		functionOutput=outputHandler.findTitle(input);
+			if (functionOutput.getState() == OutputHandler.TITLE_DOESNT_EXIST) {	
+				serverOutput.setState(LIBRARIAN);
+				serverOutput.setOutput(functionOutput.getOutput());
+			} else if (functionOutput.getState() == OutputHandler.TITLE_EXISTS) {
+				functionOutput=outputHandler.deleteTitle(input);
 				screenOutput=functionOutput.getOutput();
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(LIBRARIAN);
