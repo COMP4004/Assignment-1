@@ -279,7 +279,19 @@ public class InputHandler {
 			state=functionOutput.getState();
 			serverOutput.setOutput(screenOutput);
 			serverOutput.setState(state);
-	 	} else if(state==CREATETITLE){
+	 	} else if (state == REMOVE_ITEM) {
+	 		functionOutput=outputHandler.findItem(input, "1");
+			if (functionOutput.getState() == OutputHandler.ITEM_DOESNT_EXIST) {	
+				serverOutput.setState(LIBRARIAN);
+				serverOutput.setOutput(functionOutput.getOutput());
+			} else if (functionOutput.getState() == OutputHandler.ITEM_EXISTS) {
+				String isbn = ItemTable.getInstance().lookupISBN(Integer.valueOf(input));
+				functionOutput=outputHandler.deleteTitle(isbn);
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(LIBRARIAN);
+			} 		
+		} else if(state==CREATETITLE){
 			if(input.equalsIgnoreCase("log out")){
 				screenOutput = "Successfully Log Out!";
 				state = WAITING;
