@@ -302,6 +302,17 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(LIBRARIAN);
 			} 		
+		} else if (state == REMOVE_USER) {
+	 		functionOutput=outputHandler.findUser(input);
+			if (functionOutput.getState() == OutputHandler.USER_DOESNT_EXIST) {	
+				serverOutput.setState(LIBRARIAN);
+				serverOutput.setOutput(functionOutput.getOutput());
+			} else if (functionOutput.getState() == OutputHandler.USER_EXISTS) {
+				functionOutput=outputHandler.deleteUser(UserTable.getInstance().lookupUserName(Integer.valueOf(input)));
+				screenOutput=functionOutput.getOutput();
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(LIBRARIAN);
+			} 		
 		} else if(state==CREATETITLE){
 			if(input.equalsIgnoreCase("log out")){
 				screenOutput = "Successfully Log Out!";
