@@ -67,13 +67,14 @@ public class LoanTable {
 	}
 	
 	
-	public boolean lookup(int j, String isbn, String copyNumber) {
+	public boolean lookup(int user, String isbn, String copyNumber) {
 		boolean result=true;
 		int flag=0;
 		for(int i=0;i<loanList.size();i++){
 			String ISBN=(loanList.get(i)).getIsbn();
 			String copynumber=(loanList.get(i)).getCopynumber();
-			if(ISBN.equalsIgnoreCase(isbn) && copynumber.equalsIgnoreCase(copyNumber)){
+			int userId=(loanList.get(i)).getUserid();
+			if(ISBN.equalsIgnoreCase(isbn) && copynumber.equalsIgnoreCase(copyNumber) && userId == user){
 				flag=flag+1;
 			}else{
 				flag=flag+0;	
@@ -83,6 +84,21 @@ public class LoanTable {
 			result=false;
 		}
 		return result;
+	}
+	
+	public Loan findLoan(int user, String isbn, String copyNumber) {
+		Loan loan = null;
+		
+		for (int i=0;i<loanList.size();i++) {
+			String ISBN=(loanList.get(i)).getIsbn();
+			String copynumber=(loanList.get(i)).getCopynumber();
+			int userId=(loanList.get(i)).getUserid();
+			if (ISBN.equalsIgnoreCase(isbn) && copynumber.equalsIgnoreCase(copyNumber) && userId == user) {
+				loan = loanList.get(i);
+			}
+		}
+		
+		return loan;
 	}
     
 	public boolean checkLimit(int j) {

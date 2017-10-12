@@ -3,6 +3,7 @@ package server.logic.handler;
 import java.util.Date;
 
 import server.logic.handler.model.Output;
+import server.logic.model.Loan;
 import server.logic.model.Title;
 import server.logic.model.User;
 import server.logic.tables.FeeTable;
@@ -448,6 +449,38 @@ public class OutputHandler {
 			output.setState(InputHandler.LIBRARIAN);
 		}
 		
+		return output;
+	}
+	
+	public Output findLoan(String input) {
+		Output output = new Output("", 0);
+		Loan result;
+		String[] strArray = null;
+		strArray = input.split(",");
+		if (strArray.length != 2) {
+			output.setOutput("Your input should be in this format:'userID,itemID'");
+			output.setState(InputHandler.FIND_LOAN);
+		} else {
+			boolean isValidUserId = isNumber(strArray[0]);
+			boolean isValidItemId = isNumber(strArray[1]);
+			if (!isValidUserId) {
+				output.setOutput("The user ID must be a number.");
+				output.setState(InputHandler.FIND_LOAN);
+			} else if (!isValidItemId) {
+				output.setOutput("The item ID must be a number.");
+				output.setState(InputHandler.FIND_LOAN);
+			} else {
+				String itemISBN = ItemTable.getInstance().lookupISBN(Integer.valueOf(strArray[1]));
+				String copyNumber = ItemTable.getInstance().lookupCopyNumber(Integer.valueOf(strArray[1]));
+				result = LoanTable.getInstance().findLoan(Integer.valueOf(strArray[0]), itemISBN, copyNumber);
+				if (result == null) {
+					output.setOutput("Loan does not exist!");
+				} else {
+					output.setOutput(result.toString());
+				}
+				output.setState(InputHandler.LIBRARIAN);
+			}
+		} 
 		return output;
 	}
 

@@ -41,6 +41,7 @@ public class InputHandler {
 	public static final int RETURN_LOANCOPY = 27;
 	public static final int MONITOR_SYSTEM = 28;
 	public static final int CHECK_RESERVATION = 29;
+	public static final int FIND_LOAN = 30;
 
 	OutputHandler outputHandler=new OutputHandler();
 
@@ -240,17 +241,22 @@ public class InputHandler {
 				state = CHECK_RESERVATION;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
+			} else if(input.equals("find loan")) { 
+				screenOutput = "Please enter the userID and itemID:'userID,itemID'";
+				state = FIND_LOAN;
+				serverOutput.setOutput(screenOutput);
+				serverOutput.setState(state);
 			} else if(input.equalsIgnoreCase("main menu")){
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
 			}else{
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -313,6 +319,12 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(LIBRARIAN);
 			} 		
+		} else if (state == FIND_LOAN) {
+	 		functionOutput=outputHandler.findLoan(input);
+			screenOutput=functionOutput.getOutput();
+			state=functionOutput.getState();
+			serverOutput.setOutput(screenOutput);
+			serverOutput.setState(state);
 		} else if(state==CREATETITLE){
 			if(input.equalsIgnoreCase("log out")){
 				screenOutput = "Successfully Log Out!";
@@ -340,7 +352,7 @@ public class InputHandler {
 			} else if(input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -365,7 +377,7 @@ public class InputHandler {
 			} else if(input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -415,7 +427,7 @@ public class InputHandler {
 			} else if (input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -439,7 +451,7 @@ public class InputHandler {
 			} else if (input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -463,7 +475,7 @@ public class InputHandler {
 			} else if (input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
@@ -482,7 +494,7 @@ public class InputHandler {
 			} else if (input.equalsIgnoreCase("main menu")) {
 				screenOutput = "What would you like to do? Please select one of the following:'add item', 'add user',"
 						+ " 'add title', 'borrow loancopy', 'collect fine', 'remove item', 'remove title', 'remove user', "
-						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system'.";
+						+ "'remove user', 'renew loan', 'return loancopy', 'monitor system', 'check reservation', 'find loan'.";
 				state = LIBRARIAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);

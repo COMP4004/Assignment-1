@@ -112,6 +112,18 @@ public class ItemTable {
 		return isbn;
 	}
 	
+	public String lookupCopyNumber(int itemId) {
+		String copyNumber = "";
+		
+		for (int i=0;i<itemList.size();i++) {
+			if(itemList.get(i).getItemid() == itemId) {
+				copyNumber = itemList.get(i).getCopynumber();
+				break;
+			}
+		}
+		return copyNumber;
+	}
+	
 	public void deleteAll(String string) {
 		for(int i=0;i<itemList.size();i++){
 			if(string.equalsIgnoreCase(itemList.get(i).getISBN())){
