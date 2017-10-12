@@ -42,6 +42,8 @@ public class InputHandler {
 	public static final int MONITOR_SYSTEM = 28;
 	public static final int CHECK_RESERVATION = 29;
 	public static final int FIND_LOAN = 30;
+	public static final int RENEW_LOAN_PRINT_LOAN = 31;
+	public static final int RENEW_LOAN_COLLECT_FINE = 32;
 
 	OutputHandler outputHandler=new OutputHandler();
 
@@ -222,7 +224,7 @@ public class InputHandler {
 				serverOutput.setState(state);
 			} else if(input.equalsIgnoreCase("renew loan")) {
 				screenOutput = "Please enter the user ID and item ID:'user ID,item ID'";
-				state = RENEW_LOAN;
+				state = RENEW_LOAN_PRINT_LOAN;
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(state);
 			} else if(input.equalsIgnoreCase("return loancopy")) {
@@ -319,6 +321,35 @@ public class InputHandler {
 				serverOutput.setOutput(screenOutput);
 				serverOutput.setState(LIBRARIAN);
 			} 		
+		} else if (state == RENEW_LOAN_PRINT_LOAN) {
+	 		functionOutput=outputHandler.findLoan(input);
+			screenOutput=functionOutput.getOutput();
+			state=functionOutput.getState();
+			serverOutput.setOutput(screenOutput);
+			if (!screenOutput.equalsIgnoreCase("Loan does not exist!")) {
+				serverOutput.setState(RENEW_LOAN);
+			} else {
+				serverOutput.setState(state);
+			}	
+		} else if (state == RENEW_LOAN_COLLECT_FINE) {
+			String[] strArray = null;
+			strArray = input.split(",");
+			String userMail = UserTable.getInstance().lookupUserName(Integer.valueOf(strArray[0]));
+	 		functionOutput=outputHandler.payFine(userMail);
+			screenOutput=functionOutput.getOutput();
+			state=functionOutput.getState();
+			if (state == USER) { // Success. Fine cleared.
+				serverOutput.setState(RENEW_LOAN); // Attempt to continue.
+			} else {
+				serverOutput.setState(LIBRARIAN); // Nothing else to do.
+			}
+			serverOutput.setOutput(screenOutput);
+		} else if (state == RENEW_LOAN) {
+	 		functionOutput=outputHandler.renewLoan(input);
+			screenOutput=functionOutput.getOutput();
+			state=functionOutput.getState();
+			serverOutput.setOutput(screenOutput);
+			serverOutput.setState(state);
 		} else if (state == FIND_LOAN) {
 	 		functionOutput=outputHandler.findLoan(input);
 			screenOutput=functionOutput.getOutput();

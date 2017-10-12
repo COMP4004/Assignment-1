@@ -484,6 +484,38 @@ public class OutputHandler {
 		return output;
 	}
 
+	public Output renewLoan(String input) {
+		Output output = new Output("", 0);
+		String[] strArray = null;
+		strArray = input.split(",");
+		boolean limit=LoanTable.getInstance().checkLimit(Integer.valueOf(strArray[0]));
+		if (!limit) {
+			output.setOutput("Limit reached. Unable to renew the loan!");
+			output.setState(InputHandler.LIBRARIAN);
+		} else {
+			boolean fee=FeeTable.getInstance().lookup(Integer.valueOf(strArray[0]));
+			if (!fee) {
+				output.setOutput("The user has a fine!");
+				output.setState(InputHandler.RENEW_LOAN_COLLECT_FINE);
+			} else {
+				String itemISBN = ItemTable.getInstance().lookupISBN(Integer.valueOf(strArray[1]));
+				String copyNumber = ItemTable.getInstance().lookupCopyNumber(Integer.valueOf(strArray[1]));
+				boolean notOnLoanByUser=LoanTable.getInstance().lookup(Integer.valueOf(strArray[0]), itemISBN, copyNumber);
+				boolean onLoanBysomeoneElse=LoanTable.getInstance().lookup(itemISBN, copyNumber);
+				if (notOnLoanByUser && !onLoanBysomeoneElse) {
+					output.setOutput("The title is reserved. Unable to renew!");
+					output.setState(InputHandler.LIBRARIAN);
+				} else {
+					String userMail = UserTable.getInstance().lookupUserName(Integer.valueOf(strArray[0]));
+					output = renew(userMail+","+itemISBN+","+copyNumber);
+					output.setState(InputHandler.LIBRARIAN);
+				}
+			}
+		}	
+		
+		return output;
+	}
+	
 	public static boolean isInteger(String value) {
 		char[] ch = value.toCharArray();
 		boolean isNumber=true;

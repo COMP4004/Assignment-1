@@ -67,6 +67,24 @@ public class LoanTable {
 	}
 	
 	
+	public boolean lookup(String isbn, String copyNumber) {
+		boolean result=true;
+		int flag=0;
+		for(int i=0;i<loanList.size();i++){
+			String ISBN=(loanList.get(i)).getIsbn();
+			String copynumber=(loanList.get(i)).getCopynumber();
+			if(ISBN.equalsIgnoreCase(isbn) && copynumber.equalsIgnoreCase(copyNumber)){
+				flag=flag+1;
+			}else{
+				flag=flag+0;	
+			}
+		}
+		if(flag!=0){
+			result=false;
+		}
+		return result;
+	}
+	
 	public boolean lookup(int user, String isbn, String copyNumber) {
 		boolean result=true;
 		int flag=0;
