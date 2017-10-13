@@ -31,6 +31,8 @@ public class CollectFineTest extends TestCase {
 	
 	@Test
 	public void testValidCollectFine() {
+		LoanTable.getInstance().getLoanTable().clear();
+		
 		serverOutput = inputHandler.processInput("0", InputHandler.COLLECT_FINE);
 		  
 		// Test screen output

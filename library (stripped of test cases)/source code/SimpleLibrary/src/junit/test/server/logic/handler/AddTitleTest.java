@@ -1,5 +1,6 @@
 package junit.test.server.logic.handler;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import server.logic.handler.InputHandler;
 import server.logic.handler.OutputHandler;
 import server.logic.handler.model.Output;
 import server.logic.tables.TitleTable;
+import utilities.Trace;
 
 public class AddTitleTest extends TestCase {
   	private OutputHandler outputHandler = null;
