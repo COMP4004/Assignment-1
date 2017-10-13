@@ -14,6 +14,7 @@ import server.logic.handler.OutputHandler;
 import server.logic.handler.model.Output;
 import server.logic.handler.model.ServerOutput;
 import server.logic.model.Loan;
+import server.logic.tables.FeeTable;
 import server.logic.tables.ItemTable;
 import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
@@ -27,6 +28,7 @@ public class BorrowLoancopyTest extends TestCase {
 		inputHandler = new InputHandler();
 		serverOutput = new ServerOutput("", InputHandler.WAITING);
 		LoanTable.getInstance().getLoanTable().clear();
+		FeeTable.getInstance().getFeeTable().clear();
 	}
 
 	@Test
@@ -85,7 +87,7 @@ public class BorrowLoancopyTest extends TestCase {
 	 	LoanTable.getInstance().getLoanTable().add(loan);
 		
 		// Attempt to borrow a book that is on loan.	 	
-		serverOutput = inputHandler.processInput("0,0", InputHandler.BORROW_LOANCOPY);
+		serverOutput = inputHandler.processInput("1,0", InputHandler.BORROW_LOANCOPY);
 		  
 		// Test screen output
 		assertEquals("The Item is Not Available!", serverOutput.getOutput());

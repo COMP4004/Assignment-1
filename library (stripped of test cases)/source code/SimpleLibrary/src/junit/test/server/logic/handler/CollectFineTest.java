@@ -7,6 +7,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import server.logic.handler.InputHandler;
 import server.logic.handler.model.ServerOutput;
+import server.logic.tables.LoanTable;
 
 public class CollectFineTest extends TestCase {
   	private InputHandler inputHandler = null;
@@ -33,7 +34,7 @@ public class CollectFineTest extends TestCase {
 		serverOutput = inputHandler.processInput("0", InputHandler.COLLECT_FINE);
 		  
 		// Test screen output
-		assertEquals(serverOutput.getOutput(), "success");
+		assertEquals("success", serverOutput.getOutput());
 		// Test system state
 		assertEquals(InputHandler.LIBRARIAN, serverOutput.getState());
 	}

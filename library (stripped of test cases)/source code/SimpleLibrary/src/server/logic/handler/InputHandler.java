@@ -350,6 +350,12 @@ public class InputHandler {
 			state=functionOutput.getState();
 			serverOutput.setOutput(screenOutput);
 			serverOutput.setState(state);
+		} else if (state == RETURN_LOANCOPY) {
+	 		functionOutput=outputHandler.returnLoanCopy(input);
+			screenOutput=functionOutput.getOutput();
+			state=functionOutput.getState();
+			serverOutput.setOutput(screenOutput);
+			serverOutput.setState(state);
 		} else if (state == FIND_LOAN) {
 	 		functionOutput=outputHandler.findLoan(input);
 			screenOutput=functionOutput.getOutput();

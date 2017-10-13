@@ -483,6 +483,39 @@ public class OutputHandler {
 		} 
 		return output;
 	}
+	
+	public Output returnLoanCopy(String input) {
+		Output output = new Output("", 0);
+		Loan result;
+		String[] strArray = null;
+		strArray = input.split(",");
+		if (strArray.length != 2) {
+			output.setOutput("Your input should be in this format:'userID,itemID'");
+			output.setState(InputHandler.RETURN_LOANCOPY);
+		} else {
+			boolean isValidUserId = isNumber(strArray[0]);
+			boolean isValidItemId = isNumber(strArray[1]);
+			if (!isValidUserId) {
+				output.setOutput("The user ID must be a number.");
+				output.setState(InputHandler.RETURN_LOANCOPY);
+			} else if (!isValidItemId) {
+				output.setOutput("The item ID must be a number.");
+				output.setState(InputHandler.RETURN_LOANCOPY);
+			} else {
+				String itemISBN = ItemTable.getInstance().lookupISBN(Integer.valueOf(strArray[1]));
+				String copyNumber = ItemTable.getInstance().lookupCopyNumber(Integer.valueOf(strArray[1]));
+				result = LoanTable.getInstance().findLoan(Integer.valueOf(strArray[0]), itemISBN, copyNumber);
+				if (result == null) {
+					output.setOutput("Loan does not exist!");
+				} else {
+					String userMail = UserTable.getInstance().lookupUserName(Integer.valueOf(strArray[0]));
+					output = returnBook(userMail+","+itemISBN+","+copyNumber);
+				}
+				output.setState(InputHandler.LIBRARIAN);
+			}
+		} 
+		return output;
+	}
 
 	public Output renewLoan(String input) {
 		Output output = new Output("", 0);
